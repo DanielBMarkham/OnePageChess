@@ -38,7 +38,7 @@
             width: 640px;
             background-color: #fff;
         }
-    /* PEN notation for pieces  */
+        /* PEN notation for pieces: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation    */
     .r:before { content: '\265C';}
     .n:before { content: '\265E';}
     .b:before { content: '\265D';}
@@ -58,7 +58,7 @@
         <div id="toMove" class="statusLine"></div>
         <div id="blackPlayer" class="statusLine"></div>
         <div class="chessboard">
-            <!-- 1st -->
+            <!-- Algebraic notation for board: https://en.wikipedia.org/wiki/Algebraic_notation_(chess)   -->
             <div id="a8" class="white"></div>
             <div id="b8" class="black"></div>
             <div id="c8" class="white"></div>
@@ -67,7 +67,6 @@
             <div id="f8" class="black"></div>
             <div id="g8" class="white"></div>
             <div id="h8" class="black"></div>
-            <!-- 2nd -->
             <div id="a7" class="black"></div>
             <div id="b7" class="white"></div>
             <div id="c7" class="black"></div>
@@ -76,7 +75,6 @@
             <div id="f7" class="white"></div>
             <div id="g7" class="black"></div>
             <div id="h7" class="white"></div>
-            <!-- 3th -->
             <div id="a6" class="white"></div>
             <div id="b6" class="black"></div>
             <div id="c6" class="white"></div>
@@ -85,7 +83,6 @@
             <div id="f6" class="black"></div>
             <div id="g6" class="white"></div>
             <div id="h6" class="black"></div>
-            <!-- 4st -->
             <div id="a5" class="black"></div>
             <div id="b5" class="white"></div>
             <div id="c5" class="black"></div>
@@ -94,7 +91,6 @@
             <div id="f5" class="white"></div>
             <div id="g5" class="black"></div>
             <div id="h5" class="white"></div>
-            <!-- 5th -->
             <div id="a4" class="white"></div>
             <div id="b4" class="black"></div>
             <div id="c4" class="white"></div>
@@ -103,7 +99,6 @@
             <div id="f4" class="black"></div>
             <div id="g4" class="white"></div>
             <div id="h4" class="black"></div>
-            <!-- 6th -->
             <div id="a3" class="black"></div>
             <div id="b3" class="white"></div>
             <div id="c3" class="black"></div>
@@ -112,7 +107,6 @@
             <div id="f3" class="white"></div>
             <div id="g3" class="black"></div>
             <div id="h3" class="white"></div>
-            <!-- 7th -->
             <div id="a2" class="white"></div>
             <div id="b2" class="black"></div>
             <div id="c2" class="white"></div>
@@ -121,7 +115,6 @@
             <div id="f2" class="black"></div>
             <div id="g2" class="white"></div>
             <div id="h2" class="black"></div>
-            <!-- 8th -->
             <div id="a1" class="black"></div>
             <div id="b1" class="white"></div>
             <div id="c1" class="black"></div>
@@ -135,80 +128,35 @@
         <div id="locationYear" class="statusLine"></div>
     </div>
         <script>
-            var pieceMap = {
-                "White,King": "♔",
-                "Black,King": "♚",
-                "White,Queen": "♕",
-                "Black,Queen": "♛",
-                "White,Rook": "♖",
-                "Black,Rook": "♜",
-                "White,Bishop": "♗",
-                "Black,Bishop": "♝",
-                "White,Knight": "♘",
-                "Black,Knight": "♞",
-                "White,Pawn": "♙",
-                "Black,Pawn": "♟"
-            };
-            var initialBoard = [
-                { "a7": "Black,Pawn" },
-                { "b7": "Black,Pawn" },
-                { "c7": "Black,Pawn" },
-                { "d7": "Black,Pawn" },
-                { "e7": "Black,Pawn" },
-                { "f7": "Black,Pawn" },
-                { "g7": "Black,Pawn" },
-                { "h7": "Black,Pawn" },
-
-                { "a8": "Black,Rook" },
-                { "b8": "Black,Knight" },
-                { "c8": "Black,Bishop" },
-                { "d8": "Black,Queen" },
-                { "e8": "Black,King" },
-                { "f8": "Black,Bishop" },
-                { "g8": "Black,Knight" },
-                { "h8": "Black,Rook" },
-
-
-                { "a2": "White,Pawn" },
-                { "b2": "White,Pawn" },
-                { "c2": "White,Pawn" },
-                { "d2": "White,Pawn" },
-                { "e2": "White,Pawn" },
-                { "f2": "White,Pawn" },
-                { "g2": "White,Pawn" },
-                { "h2": "White,Pawn" },
-
-                { "a1": "White,Rook" },
-                { "b1": "White,Knight" },
-                { "c1": "White,Bishop" },
-                { "d1": "White,Queen" },
-                { "e1": "White,King" },
-                { "f1": "White,Bishop" },
-                { "g1": "White,Knight" },
-                { "h1": "White,Rook" }
-            ];
-            function lookupPieceHtml(lookupValue) {
-                var filterResult = [lookupValue].map(e => pieceMap[e]).filter(e => e);
-                return filterResult[0] ?? "?";
-            }
-            function setCell(location, piece) {
-                document.getElementById(location).innerText = piece;
-            }
             function addPieceToCell(location, piece) {
                 document.getElementById(location).classList.add(piece);
             }
             function removePieceFromCell(location) {
-                if (document.getElementById(location).classList.contains("white"))
-                {document.getElementById(location).className = "white"; }
-                else { document.getElementById(location).className = "black";}
+                if (document.getElementById(location).classList.contains("white")) { document.getElementById(location).className = "white"; }
+                else { document.getElementById(location).className = "black"; }
             }
-            initialBoard.forEach(function (piece) {
-                var location = Object.keys(piece)[0];
-                var pieceName = piece[location];
-                setCell(location, lookupPieceHtml(pieceName));
-            });
-
-        // HERE'S WHERE TO ADD URL PERSISTENCE
+            function addListOfPiecesToBoard(piecesList) {
+                piecesList.map(e => addPieceToCell(e.slice(-2), e.substring(0, 1)));
+            }
+            function convertStringToBoard(stringBoardConfig) {
+                addListOfPiecesToBoard(stringBoardConfig.split(","));
+            }
+            function convertBoardToArray() {
+                ret = [];
+                ["a", "b", "c", "d", "e", "f", "g", "h"].forEach(j =>
+                    ["1", "2", "3", "4", "5", "6", "7", "8"].forEach(k => {
+                        if (document.getElementById(j + k).classList.length > 1) {
+                            ret.push(document.getElementById(j + k).classList[1]+k);
+                        }
+                    }));
+                return ret;
+            }
+            function convertBoardToString() {
+                return convertBoardToArray().join(",");
+            }
+            var initialBoardString = "Ra1,Nb1,Bc1,Qd1,Ke1,Bf1,Ng1,Rh1,Pa2,Pb2,Pc2,Pd2,Pe2,Pf2,Pg2,Ph2,ra8,nb8,bc8,qd8,ke8,bf8,ng8,rh8,pa7,pb7,pc7,pd7,pe7,pf7,pg7,ph7";
+            convertStringToBoard(initialBoardString);
+            // HERE'S WHERE TO ADD URL PERSISTENCE
             const game = "";
             const board = "";
             const whitePlayer = "";
