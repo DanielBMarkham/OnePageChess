@@ -38,6 +38,19 @@
             width: 640px;
             background-color: #fff;
         }
+    /* PEN notation for pieces  */
+    .r:before { content: '\265C';}
+    .n:before { content: '\265E';}
+    .b:before { content: '\265D';}
+    .q:before { content: '\265B';}
+    .k:before { content: '\265A';}
+    .p:before { content: '\265F';}
+    .R:before { content: '\2656';}
+    .N:before { content: '\2654';}
+    .B:before { content: '\2657';}
+    .Q:before { content: '\2655';}
+    .K:before { content: '\2654';}
+    .P:before { content: '\2659';}
     </style>
 </head>
 <body>
@@ -77,7 +90,7 @@
             <div id="b5" class="white"></div>
             <div id="c5" class="black"></div>
             <div id="d5" class="white"></div>
-            <div id="e5" class="black"></div>
+            <div id="e5" class="black "></div>
             <div id="f5" class="white"></div>
             <div id="g5" class="black"></div>
             <div id="h5" class="white"></div>
@@ -180,6 +193,14 @@
             }
             function setCell(location, piece) {
                 document.getElementById(location).innerText = piece;
+            }
+            function addPieceToCell(location, piece) {
+                document.getElementById(location).classList.add(piece);
+            }
+            function removePieceFromCell(location) {
+                if (document.getElementById(location).classList.contains("white"))
+                {document.getElementById(location).className = "white"; }
+                else { document.getElementById(location).className = "black";}
             }
             initialBoard.forEach(function (piece) {
                 var location = Object.keys(piece)[0];
