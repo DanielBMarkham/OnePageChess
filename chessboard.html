@@ -6,7 +6,7 @@
     <style>
         .game {
             width: 710px;
-            height: 790px;
+            height: 1020px;
             overflow:hidden;
         }
         .game * {
@@ -33,7 +33,7 @@
         .white {
             background-color: #fff;
         }
-        .status {
+        .statusLine {
             float: left;
             width: 640px;
             background-color: #fff;
@@ -42,6 +42,8 @@
 </head>
 <body>
     <div class="game">
+        <div id="toMove" class="statusLine"></div>
+        <div id="blackPlayer" class="statusLine"></div>
         <div class="chessboard">
             <!-- 1st -->
             <div id="a8" class="white"></div>
@@ -114,9 +116,10 @@
             <div id="e1" class="black"></div>
             <div id="f1" class="white"></div>
             <div id="g1" class="black"></div>
-            <div id="h1"class="white"></div>
+            <div id="h1" class="white"></div>
         </div>
-        <div id="status" class="status"></div>
+        <div id="whitePlayer" class="statusLine"></div>
+        <div id="locationYear" class="statusLine"></div>
     </div>
         <script>
             var pieceMap = {
@@ -185,9 +188,13 @@
             });
 
         // HERE'S WHERE TO ADD URL PERSISTENCE
+            const game = "";
+            const board = "";
+            const whitePlayer = "";
+            const blackPlayer = "";
             const myParam = window.location.search[1] ?? "0"; // current move
             const whoMovesNext = myParam < 10 ? "White" : "Black";
-            document.getElementById("status").innerText = whoMovesNext + " to move";
+            document.getElementById("toMove").innerText = whoMovesNext + " to move";
         </script>
     </body>
 </html>
