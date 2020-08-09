@@ -6,7 +6,7 @@
     <style>
         .game {
             width: 710px;
-            height: 1020px;
+            height: 1080px;
             overflow:hidden;
         }
         .game * {
@@ -43,6 +43,11 @@
             width: 640px;
             background-color: #fff;
         }
+        .comment {
+            font-size: xx-large;
+            font-style: italic;
+        }
+
     .whiteToMove:before{ content:'White ';}
     .blackToMove:before{content:'Black ';}
         /* PEN notation for pieces: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation    */
@@ -63,7 +68,7 @@
 <body>
     <div class="game">
         <div id="toMove" class="statusLine whiteToMove" onclick="toggleToMove(event);">to Move</div>
-        <div id="blackPlayer" class="statusLine"></div>
+        <div id="blackPlayer" contentEditable="true" class="statusLine" onblur="pageToQueryString(this);"></div>
         <div class="chessboard">
             <!-- Algebraic notation for board: https://en.wikipedia.org/wiki/Algebraic_notation_(chess)   -->
             <div id="a8" class="white"></div>
@@ -131,8 +136,9 @@
             <div id="g1" class="black"></div>
             <div id="h1" class="white"></div>
         </div>
-        <div id="whitePlayer" class="statusLine"></div>
-        <div id="locationYear" class="statusLine"></div>
+        <div id="whitePlayer" contentEditable="true" onblur="pageToQueryString(this);" class="statusLine"></div>
+        <div id="locationYear" contentEditable="true" onblur="pageToQueryString(this);" class="statusLine"></div>
+        <div id="comment" contentEditable="true" onblur="pageToQueryString(this);" class="statusLine comment"></div>
     </div>
         <script>
             function addPieceToCell(location, piece) {
@@ -175,21 +181,30 @@
                 return convertBoardToArray().join(",");
             }
             var initialBoardString = "Ra1,Nb1,Bc1,Qd1,Ke1,Bf1,Ng1,Rh1,Pa2,Pb2,Pc2,Pd2,Pe2,Pf2,Pg2,Ph2,ra8,nb8,bc8,qd8,ke8,bf8,ng8,rh8,pa7,pb7,pc7,pd7,pe7,pf7,pg7,ph7";
-            // HERE'S WHERE TO ADD URL PERSISTENCE
-            var board,game,whoMovesNext="";
+            // HERE'S WHERE TO ADD URL PERSISTENCE.(these leave eventually)
+            var board,game,players,locationYear,comment,whoMovesNext="";
             var parms;
 
             function variablesToBoard(){
                 convertStringToBoard(board);
                 if (game=="w"){
                     document.getElementById("toMove").className="statusLine whiteToMove";
-                } else {document.getElementById("toMove").className="statusLine blackToMove";}
+                } else { document.getElementById("toMove").className = "statusLine blackToMove"; }
+                if (players.indexOf(",")>-1) {
+                    document.getElementById('blackPlayer').innerText = players.split(",")[0];
+                    document.getElementById('whitePlayer').innerText = players.split(",")[1];
+                }
+                document.getElementById('locationYear').innerText = locationYear;
+                document.getElementById('comment').innerText = comment;
             }
             function queryStringToPage(){
                 // we want these variable to escape the function
                 parms=new URLSearchParams(window.location.search);
-                if (parms.get("g")=="w") {game="w";} else {game="b";}
-                if(parms.has("b")) {board=parms.get("b");} else {board=initialBoardString;};
+                if (parms.get("g")=="b") {game="b";} else {game="w";}
+                if (parms.has("b")) { board = parms.get("b"); } else { board = initialBoardString; };
+                if (parms.get("p") != "") { players = parms.get("p"); } else { players = ""; }
+                if (parms.get("l") != "") { locationYear = parms.get("l"); } else { locationYear = ""; }
+                if (parms.get("c") != "") { comment = parms.get("c"); } else { comment = "";}
                 variablesToBoard();
             }
             function pageToQueryString(){
@@ -201,10 +216,16 @@
                 parms.set("g", game);
                 board = convertBoardToString();
                 parms.set("b", board);
+                players = document.getElementById('blackPlayer').innerText + "," + document.getElementById('whitePlayer').innerText;
+                parms.set("p", players);
+                locationYear = document.getElementById('locationYear').innerText;
+                parms.set("l", locationYear);
+                comment = document.getElementById('comment').innerText;
+                parms.set("c", comment);
                 window.history.replaceState({}, '', `${location.pathname}?${parms}`);
             }
-            queryStringToPage();
-            function getTarget(evt){
+
+            function getTarget(evt) {
                 event = event || window.event;
                 return event.target || event.srcElement;
             }
@@ -236,6 +257,7 @@
             document.querySelectorAll('.chessboard div').forEach(element => {
                 element.addEventListener('click', cellClick, element, false);
             })
+            queryStringToPage(); // Let's go!
         </script>
     </body>
 </html>
