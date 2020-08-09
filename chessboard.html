@@ -141,8 +141,7 @@
         <div id="comment" contentEditable="true" onblur="pageToQueryString(this);" class="statusLine comment"></div>
     </div>
         <script>
-            var board,game,players,locationYear,comment,whoMovesNext="";
-            var parms;
+            var board;
             function addPieceToCell(location, piece) {
                 document.getElementById(location).classList.add(piece);
             }
@@ -186,31 +185,30 @@
             // HERE'S WHERE TO ADD URL PERSISTENCE
             function variablesToBoard(){
                 convertStringToBoard(board);
-                if (game=="w"){
-                    document.getElementById("toMove").className="statusLine whiteToMove";
-                } else { document.getElementById("toMove").className = "statusLine blackToMove"; }
-                if (players.indexOf(",")>-1) {
-                    document.getElementById('blackPlayer').innerText = players.split(",")[0];
-                    document.getElementById('whitePlayer').innerText = players.split(",")[1];
-                }
-                document.getElementById('locationYear').innerText = locationYear;
-                document.getElementById('comment').innerText = comment;
             }
-            function getQueryStringParameterOrDefauls(key,dflt){
+            function getQueryStringParameterOrDefauls(parms,key,dflt){
                 if (parms.has(key) != "") { return parms.get(key); } else { return dflt; }
             }
             function queryStringToPage(){
                 // we want these variable to escape the function
-                parms=new URLSearchParams(window.location.search);
-                game=getQueryStringParameterOrDefauls("g", "w");
-                board=getQueryStringParameterOrDefauls("b",initialBoardString);
-                players=getQueryStringParameterOrDefauls("p", "");
-                locationYear=getQueryStringParameterOrDefauls("l","");
-                comment=getQueryStringParameterOrDefauls("c", "");
+                var parms=new URLSearchParams(window.location.search);
+                var game=getQueryStringParameterOrDefauls(parms,"g", "w");
+                if (game=="w"){
+                    document.getElementById("toMove").className="statusLine whiteToMove";
+                } else { document.getElementById("toMove").className = "statusLine blackToMove"; }
+                board=getQueryStringParameterOrDefauls(parms,"b",initialBoardString);
+                var players=getQueryStringParameterOrDefauls(parms,"p", "");
+                if (players.indexOf(",")>-1) {
+                    document.getElementById('blackPlayer').innerText = players.split(",")[0];
+                    document.getElementById('whitePlayer').innerText = players.split(",")[1];
+                }
+                document.getElementById('locationYear').innerText=getQueryStringParameterOrDefauls(parms,"l","");
+                document.getElementById('comment').innerText = getQueryStringParameterOrDefauls(parms,"c", "");
                 variablesToBoard();
             }
             function pageToQueryString(){
                 parms=new URLSearchParams(window.location.search);
+                var game,players;
                 parms.set("b", board);
                 if (document.getElementById("toMove").classList.contains("whiteToMove")){
                     game="w";
@@ -220,10 +218,8 @@
                 parms.set("b", board);
                 players = document.getElementById('blackPlayer').innerText + "," + document.getElementById('whitePlayer').innerText;
                 parms.set("p", players);
-                locationYear = document.getElementById('locationYear').innerText;
-                parms.set("l", locationYear);
-                comment = document.getElementById('comment').innerText;
-                parms.set("c", comment);
+                parms.set("l", document.getElementById('locationYear').innerText);
+                parms.set("c",document.getElementById('comment').innerText);
                 window.history.replaceState({}, '', `${location.pathname}?${parms}`);
             }
 
