@@ -141,7 +141,6 @@
         <div id="comment" contentEditable="true" onblur="pageToQueryString(this);" class="statusLine comment"></div>
     </div>
         <script>
-            var board;
             function addPieceToCell(location, piece) {
                 document.getElementById(location).classList.add(piece);
             }
@@ -181,16 +180,11 @@
             function convertBoardToString() {
                 return convertBoardToArray().join(",");
             }
-            var initialBoardString = "Ra1,Nb1,Bc1,Qd1,Ke1,Bf1,Ng1,Rh1,Pa2,Pb2,Pc2,Pd2,Pe2,Pf2,Pg2,Ph2,ra8,nb8,bc8,qd8,ke8,bf8,ng8,rh8,pa7,pb7,pc7,pd7,pe7,pf7,pg7,ph7";
-            // HERE'S WHERE TO ADD URL PERSISTENCE
-            function variablesToBoard(){
-                convertStringToBoard(board);
-            }
             function getQueryStringParameterOrDefauls(parms,key,dflt){
                 if (parms.has(key) != "") { return parms.get(key); } else { return dflt; }
             }
             function queryStringToPage(){
-                // we want these variable to escape the function
+                const initialBoardString = "Ra1,Nb1,Bc1,Qd1,Ke1,Bf1,Ng1,Rh1,Pa2,Pb2,Pc2,Pd2,Pe2,Pf2,Pg2,Ph2,ra8,nb8,bc8,qd8,ke8,bf8,ng8,rh8,pa7,pb7,pc7,pd7,pe7,pf7,pg7,ph7";
                 var parms=new URLSearchParams(window.location.search);
                 var game=getQueryStringParameterOrDefauls(parms,"g", "w");
                 if (game=="w"){
@@ -204,7 +198,7 @@
                 }
                 document.getElementById('locationYear').innerText=getQueryStringParameterOrDefauls(parms,"l","");
                 document.getElementById('comment').innerText = getQueryStringParameterOrDefauls(parms,"c", "");
-                variablesToBoard();
+                convertStringToBoard(board);
             }
             function pageToQueryString(){
                 parms=new URLSearchParams(window.location.search);
