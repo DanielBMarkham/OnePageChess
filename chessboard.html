@@ -254,9 +254,29 @@
                     pageToQueryString();
                 }
             }
+            function cellKeyDown(event) {
+                const key = event.key;
+                target = getTarget(event);
+                var selectedCells = document.querySelectorAll('.cellSelected');
+                if (key == undefined || target == undefined) { return; } else {
+                    if (event.originalTarget.classList.contains("statusLine")) { return; } else {
+                        if (key === "Delete" && selectedCells.length==1) {
+                            var piece = getCellPiece(selectedCells[0]);
+                            if (piece != "") {
+                                selectedCells[0].classList.remove(piece);
+                                selectedCells[0].classList.remove("cellSelected");
+                                pageToQueryString();
+                            }
+                        }
+                    }
+                }
+            }
             document.querySelectorAll('.chessboard div').forEach(element => {
                 element.addEventListener('click', cellClick, element, false);
-            })
+            });
+            document.querySelectorAll('body').forEach(element => {
+                element.addEventListener('keydown', cellKeyDown, element, false);
+            });
             queryStringToPage(); // Let's go!
         </script>
     </body>
