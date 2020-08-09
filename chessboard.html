@@ -29,15 +29,22 @@
         .black {
             background-color: #999;
         }
-
+        .black:hover{background-color: rgba(255, 245, 108, 0.74);}
         .white {
             background-color: #fff;
+        }
+        .white:hover{background-color: rgba(255, 245, 108, 0.74);}
+        .cellSelected {
+            font-weight: bolder;
+            text-shadow: 0px 0px 20px red;
         }
         .statusLine {
             float: left;
             width: 640px;
             background-color: #fff;
         }
+    .whiteToMove:before{ content:'White ';}
+    .blackToMove:before{content:'Black ';}
         /* PEN notation for pieces: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation    */
     .r:before { content: '\265C';}
     .n:before { content: '\265E';}
@@ -46,7 +53,7 @@
     .k:before { content: '\265A';}
     .p:before { content: '\265F';}
     .R:before { content: '\2656';}
-    .N:before { content: '\2654';}
+    .N:before { content: '\2658';}
     .B:before { content: '\2657';}
     .Q:before { content: '\2655';}
     .K:before { content: '\2654';}
@@ -55,7 +62,7 @@
 </head>
 <body>
     <div class="game">
-        <div id="toMove" class="statusLine"></div>
+        <div id="toMove" class="statusLine whiteToMove" onclick="toggleToMove(event);">to Move</div>
         <div id="blackPlayer" class="statusLine"></div>
         <div class="chessboard">
             <!-- Algebraic notation for board: https://en.wikipedia.org/wiki/Algebraic_notation_(chess)   -->
@@ -141,12 +148,25 @@
             function convertStringToBoard(stringBoardConfig) {
                 addListOfPiecesToBoard(stringBoardConfig.split(","));
             }
+            function ifHasRemove(classList, className) {
+                if (classList == undefined) { return classList }
+                if (classList.contains(className)) { classList.remove(className); }
+                return classList;
+            }
+            function removeCellColor(classList) {
+                return ifHasRemove(ifHasRemove(classList, "black"), "white");
+            }
+            function getCellPiece(ele) {
+                var removeColor = removeCellColor(ele.cloneNode().classList); // don't want to change dom
+                var removeSelected = ifHasRemove(removeColor, "cellSelected");
+                if (removeSelected.length > 0) { return removeSelected[0]; } else { return ""; }
+            }
             function convertBoardToArray() {
                 ret = [];
                 ["a", "b", "c", "d", "e", "f", "g", "h"].forEach(j =>
                     ["1", "2", "3", "4", "5", "6", "7", "8"].forEach(k => {
                         if (document.getElementById(j + k).classList.length > 1) {
-                            ret.push(document.getElementById(j + k).classList[1]+k);
+                            ret.push(getCellPiece(document.getElementById(j + k))+j+k);
                         }
                     }));
                 return ret;
@@ -155,15 +175,67 @@
                 return convertBoardToArray().join(",");
             }
             var initialBoardString = "Ra1,Nb1,Bc1,Qd1,Ke1,Bf1,Ng1,Rh1,Pa2,Pb2,Pc2,Pd2,Pe2,Pf2,Pg2,Ph2,ra8,nb8,bc8,qd8,ke8,bf8,ng8,rh8,pa7,pb7,pc7,pd7,pe7,pf7,pg7,ph7";
-            convertStringToBoard(initialBoardString);
             // HERE'S WHERE TO ADD URL PERSISTENCE
-            const game = "";
-            const board = "";
-            const whitePlayer = "";
-            const blackPlayer = "";
-            const myParam = window.location.search[1] ?? "0"; // current move
-            const whoMovesNext = myParam < 10 ? "White" : "Black";
-            document.getElementById("toMove").innerText = whoMovesNext + " to move";
+            var board,game,whoMovesNext="";
+            var parms;
+
+            function variablesToBoard(){
+                convertStringToBoard(board);
+                if (game=="w"){
+                    document.getElementById("toMove").className="statusLine whiteToMove";
+                } else {document.getElementById("toMove").className="statusLine blackToMove";}
+            }
+            function queryStringToPage(){
+                // we want these variable to escape the function
+                parms=new URLSearchParams(window.location.search);
+                if (parms.get("g")=="w") {game="w";} else {game="b";}
+                if(parms.has("b")) {board=parms.get("b");} else {board=initialBoardString;};
+                variablesToBoard();
+            }
+            function pageToQueryString(){
+                parms=new URLSearchParams(window.location.search);
+                parms.set("b", board);
+                if (document.getElementById("toMove").classList.contains("whiteToMove")){
+                    game="w";
+                } else {game="b";}
+                parms.set("g", game);
+                board = convertBoardToString();
+                parms.set("b", board);
+                window.history.replaceState({}, '', `${location.pathname}?${parms}`);
+            }
+            queryStringToPage();
+            function getTarget(evt){
+                event = event || window.event;
+                return event.target || event.srcElement;
+            }
+            function toggleToMove(event) {
+                getTarget(event).classList.toggle("whiteToMove");
+                getTarget(event).classList.toggle("blackToMove");
+                pageToQueryString();
+            }
+            function swapPiecesInSelectedCells(){
+                var from=document.querySelectorAll('.cellSelected')[1];
+                var to=document.querySelectorAll('.cellSelected')[0];
+                var fromPieceSelected=getCellPiece(from);
+                var toPieceSelected=getCellPiece(to);
+                if (fromPieceSelected!="") {from.classList.remove(fromPieceSelected);}
+                if (toPieceSelected!="") {to.classList.remove(toPieceSelected);}
+                if (toPieceSelected!="") {from.classList.add(toPieceSelected);}
+                if (fromPieceSelected!="") {to.classList.add(fromPieceSelected);}
+                from.classList.remove("cellSelected");
+                to.classList.remove("cellSelected");
+            }
+            function cellClick(event){
+                event.target.classList.toggle("cellSelected");
+                var cellsSelectedSoFar=document.querySelectorAll('.cellSelected').length;
+                if(cellsSelectedSoFar==2){
+                    swapPiecesInSelectedCells();
+                    pageToQueryString();
+                }
+            }
+            document.querySelectorAll('.chessboard div').forEach(element => {
+                element.addEventListener('click', cellClick, element, false);
+            })
         </script>
     </body>
 </html>
