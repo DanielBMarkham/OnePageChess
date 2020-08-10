@@ -59,7 +59,7 @@
 
     .whiteToMove:before{ content:'White ';}
     .blackToMove:before{content:'Black ';}
-        /* PEN notation for pieces: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation    */
+     /* FEN notation for pieces: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation    */
     .r:before { content: '\265C';}
     .n:before { content: '\265E';}
     .b:before { content: '\265D';}
@@ -189,24 +189,24 @@
             function convertBoardToString() {
                 return convertBoardToArray().join(",");
             }
-            function getQueryStringParameterOrDefauls(parms,key,dflt){
+            function getQueryStringParameterOrDefaults(parms,key,dflt){
                 if (parms.has(key) != "") { return parms.get(key); } else { return dflt; }
             }
             function queryStringToPage(){
                 const initialBoardString = "Ra1,Nb1,Bc1,Qd1,Ke1,Bf1,Ng1,Rh1,Pa2,Pb2,Pc2,Pd2,Pe2,Pf2,Pg2,Ph2,ra8,nb8,bc8,qd8,ke8,bf8,ng8,rh8,pa7,pb7,pc7,pd7,pe7,pf7,pg7,ph7";
                 var parms=new URLSearchParams(window.location.search);
-                var game=getQueryStringParameterOrDefauls(parms,"g", "w");
+                var game=getQueryStringParameterOrDefaults(parms,"g", "w");
                 if (game=="w"){
                     document.getElementById("toMove").className="statusLine whiteToMove";
                 } else { document.getElementById("toMove").className = "statusLine blackToMove"; }
-                board=getQueryStringParameterOrDefauls(parms,"b",initialBoardString);
-                var players=getQueryStringParameterOrDefauls(parms,"p", "");
+                board=getQueryStringParameterOrDefaults(parms,"b",initialBoardString);
+                var players=getQueryStringParameterOrDefaults(parms,"p", "");
                 if (players.indexOf(",")>-1) {
                     document.getElementById('blackPlayer').innerText = players.split(",")[0];
                     document.getElementById('whitePlayer').innerText = players.split(",")[1];
                 }
-                document.getElementById('locationYear').innerText=getQueryStringParameterOrDefauls(parms,"l","");
-                document.getElementById('comment').innerText = getQueryStringParameterOrDefauls(parms,"c", "");
+                document.getElementById('locationYear').innerText=getQueryStringParameterOrDefaults(parms,"l","");
+                document.getElementById('comment').innerText = getQueryStringParameterOrDefaults(parms,"c", "");
                 convertStringToBoard(board);
             }
             function pageToQueryString(){
