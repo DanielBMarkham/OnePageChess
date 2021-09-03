@@ -22,9 +22,9 @@ chessboard.html?b=Ra1%2CPa2%2Cpa7%2Cra8%2CPb2%2Cpb6%2Cbb7%2Cnb8%2CPc2%2Cpc7%2CPd
 
 2. Access the page from the net.
 
-[Here's the file on one of my S3 buckets](http://danielbmarkham.com/chessboard.html)
+[Here's the file on one of my S3 buckets](http://cdn.danielbmarkham.com/chessboard.html)
 
-[Here's The Mexican Immortal game using that S3 file](http://danielbmarkham.com/chessboard.html?b=Pa2%2Cpa7%2Cra8%2CPb4%2Cqb5%2Cbb7%2CPd4%2Cpd6%2CRe1%2CNe3%2Cpe6%2Cre8%2CPf2%2Cpf7%2Cnf8%2CKg1%2CPg2%2CRg3%2CBg5%2Cpg7%2Ckg8%2CPh2%2CQh5%2Cph6&g=w&p=Torre%2CLasker&l=Moscow%2C+1925%0A&c=The+Mexican+Immortal+aka+%22Seventh+Seal%22%0A)
+[Here's The Mexican Immortal game using that S3 file](http://cdn.danielbmarkham.com/chessboard.html?b=Pa2%2Cpa7%2Cra8%2CPb4%2Cqb5%2Cbb7%2CPd4%2Cpd6%2CRe1%2CNe3%2Cpe6%2Cre8%2CPf2%2Cpf7%2Cnf8%2CKg1%2CPg2%2CRg3%2CBg5%2Cpg7%2Ckg8%2CPh2%2CQh5%2Cph6&g=w&p=Torre%2CLasker&l=Moscow%2C+1925%0A&c=The+Mexican+Immortal+aka+%22Seventh+Seal%22%0A)
 
 **Note load times!** Usually the entire file caches up and is instantaneously available on next use.
 
