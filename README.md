@@ -1,6 +1,9 @@
 # OnePageChess
 An entire chess game you can play (where you enforce the rules) using only one html file. No other dependencies.
 
+# Quick Start
+[Here's a video link to Greg Young explaining the app. Greg wanted me to add FEN notation to the URI.](https://vimeo.com/597281686)
+
 ## Operation
 
 1. Load the file either from a local drive or a website
